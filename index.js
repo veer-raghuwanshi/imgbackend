@@ -35,13 +35,11 @@ const imageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const Image = mongoose.model('Image', imageSchema);
 
-// Handle root route
-app.get('/', (req, res) => {
-  res.send('Welcome to the image upload server!');
-});
+
 
 // Handle GET request to create a new image
-app.get('/create', async (req, res) => {
+app.get('/', async (req, res) => {
+  res.send('Welcome to the image upload server!');
   try {
     // Create a new image document
     const image = new Image({

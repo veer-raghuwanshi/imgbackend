@@ -40,11 +40,21 @@ const Image = mongoose.model('Image', imageSchema);
 // Handle GET request to create a new image
 app.get('/', async (req, res) => {
   res.send('Welcome to the image upload server!');
+
   try {
-    // Create a new image document
-    const image = new Image({
-      profileImage: 'https://imgbackend.onrender.com/uploads/example.jpg' // Replace 'example.jpg' with the desired filename
-    });
+    // Retrieve all Image documents from the database
+    const images = await Image.find();
+
+    // Extract the profileImage URLs from the documents
+    const imageUrls = images.map(image => image.profileImage);
+
+    // Return the image URLs as a JSON response
+    res.json(imageUrls);
+  } catch (error) {
+    console.error('Error retrieving images:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
     // Save the document to the database
     await image.save();

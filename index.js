@@ -1,5 +1,3 @@
-// index.js
-
 const express = require('express');
 const app = express();
 const multer = require('multer');
@@ -37,27 +35,34 @@ const imageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const Image = mongoose.model('Image', imageSchema);
 
-app.get('/', async (req, res) => {
+// Handle root route
+app.get('/', (req, res) => {
   res.send('Welcome to the image upload server!');
+});
 
+// Handle GET request to create a new image
+app.get('/create', async (req, res) => {
   try {
-    // Retrieve all Image documents from the database
-    const images = await Image.find();
+    // Create a new image document
+    const image = new Image({
+      profileImage: 'https://imgbackend.onrender.com/uploads/example.jpg' // Replace 'example.jpg' with the desired filename
+    });
 
-    // Extract the profileImage URLs from the documents
-    const imageUrls = images.map(image => image.profileImage);
+    // Save the document to the database
+    await image.save();
 
-    // Return the image URLs as a JSON response
-    res.json(imageUrls);
+    // Return the created image document as a JSON response
+    res.json(image);
   } catch (error) {
-    console.error('Error retrieving images:', error);
+    console.error('Error creating image:', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
+// Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Define a route to handle file uploads
+// Handle file uploads
 app.post('/upload', upload.single('profileImage'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
@@ -81,8 +86,6 @@ app.post('/upload', upload.single('profileImage'), async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-// Serve uploaded files statically
 
 // Start the server
 app.listen(port, () => {

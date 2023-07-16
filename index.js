@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://veer_raghuwanshi:1234@cluster1.vtznpbg.mongodb.net/imgaee', {
+mongoose.connect('mongodb+srv://veer_raghuwanshi:Veer1234@imgtesting.hzhgtms.mongodb.net/photos', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {

@@ -38,8 +38,6 @@ const imageSchema = new mongoose.Schema({
 const Image = mongoose.model('Image', imageSchema);
 
 app.get('/', async (req, res) => {
-  res.send('Welcome to the image upload server!');
-
   try {
     // Retrieve all Image documents from the database
     const images = await Image.find();
@@ -51,9 +49,10 @@ app.get('/', async (req, res) => {
     res.json(imageUrls);
   } catch (error) {
     console.error('Error retrieving images:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

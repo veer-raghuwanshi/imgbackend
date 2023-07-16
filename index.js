@@ -65,7 +65,7 @@ app.post('/upload', upload.single('profileImage'), async (req, res) => {
 
   // Create a new document in the Image collection
   const image = new Image({
-    profileImage: 'http://localhost:3000/uploads/' + req.file.filename
+    profileImage: 'https://imgbackend.onrender.com/uploads/' + req.file.filename
   });
 
   try {

@@ -37,7 +37,7 @@ const imageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const Image = mongoose.model('Image', imageSchema);
 
-app.get('/', async (req, res) => {
+app.get('/', async (req, res,next) => {
   try {
     // Retrieve all Image documents from the database
     const images = await Image.find();
@@ -51,7 +51,28 @@ app.get('/', async (req, res) => {
     console.error('Error retrieving images:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+  next()
 });
+app.use((req, res, next) => {
+  /*
+  const err = new Error('Not found');
+  err.status = 404;
+  next(err);
+  */
+  // You can use the above code if your not using the http-errors module
+  next(createError(404, 'Not found'));
+});
+//Error handler
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.send({
+    error: {
+      status: err.status || 500,
+      message: err.message
+    }
+  });
+});
+
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -79,6 +100,7 @@ app.post('/upload', upload.single('profileImage'), async (req, res) => {
     console.error('Error saving image:', error);
     res.status(500).send('Internal Server Error');
   }
+  next()
 });
 
 // Serve uploaded files statically

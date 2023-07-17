@@ -1,5 +1,3 @@
-// index.js
-
 const express = require('express');
 const app = express();
 const multer = require('multer');
@@ -51,28 +49,7 @@ app.get('/', async (req, res) => {
     console.error('Error retrieving images:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-  
 });
-app.use((req, res, next) => {
-  /*
-  const err = new Error('Not found');
-  err.status = 404;
-  next(err);
-  */
-  // You can use the above code if your not using the http-errors module
-  next(createError(404, 'Not found'));
-});
-// //Error handler
-// app.use((err, req, res, next) => {
-//   res.status(err.status || 500);
-//   res.send({
-//     error: {
-//       status: err.status || 500,
-//       message: err.message
-//     }
-//   });
-// });
-
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -100,7 +77,6 @@ app.post('/upload', upload.single('profileImage'), async (req, res) => {
     console.error('Error saving image:', error);
     res.status(500).send('Internal Server Error');
   }
-  
 });
 
 // Serve uploaded files statically
@@ -108,4 +84,4 @@ app.post('/upload', upload.single('profileImage'), async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
-});
+});  
